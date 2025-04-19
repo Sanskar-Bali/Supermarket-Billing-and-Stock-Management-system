@@ -1,0 +1,321 @@
+
+from tkinter import*
+import mysql.connector as c
+from tkinter import  messagebox
+
+def insert(code,name,rate,quantity):
+   
+   if(code=="" or name=="" or rate=="" or quantity==""):
+	   messagebox.showwarning("warning","All fields  required")
+   else:  
+       con=c.connect(host="localhost",user="root",password="Amb@123",database="billingnew") 
+       cursor=con.cursor()
+       query="insert into stock values({},'{}',{},{})".format(code,name,rate,quantity)
+       cursor.execute(query)
+       con.commit()
+       messagebox.showinfo("insert status","Inserted successfully")
+
+
+def  delete(code):
+
+   if(code==""):
+    	messagebox.showwarning("Warning","Code is required for deletion")
+   else :
+        con=c.connect(host="localhost",user="root",password="Amb@123",database="billingnew") 
+        cursor=con.cursor()
+        query="delete from stock where pcode ={}".format(code)	
+        cursor.execute(query)
+        con.commit()
+        messagebox.showinfo("Delete status","Deleted successfully")
+
+
+def  updateP(price,code):       
+      
+   if(code=="" or price==""):
+      	messagebox.showwarning("Update status","Code & Rate required")
+
+   else:
+        con=c.connect(host="localhost",user="root",password="Amb@123",database="billingnew") 
+        cursor=con.cursor() 
+        query="update stock set prate={} where pcode={}".format(price,code) 
+        cursor.execute(query)
+        con.commit()
+        messagebox.showinfo("update status","Updated Successfully")
+
+def  updateQ(quantity,code):
+
+   if(code=="" or quantity==""):
+	    messagebox.showwarning("Warning","Code & Quantity required")
+
+   else	:
+        con=c.connect(host="localhost",user="root",password="Amb@123",database="billingnew") 
+        cursor=con.cursor() 
+        query="update stock set pquantity= pquantity+{} where pcode={}".format(quantity,code) 
+        cursor.execute(query)
+        con.commit()
+        messagebox.showinfo("update status","Updated Successfully")
+
+
+
+
+def get(code):
+	if(code==""):
+	  messagebox.showwarning("Fetch status","Code is required to fetch details")
+	else:
+	  con=c.connect(host="localhost",user="root",password="Amb@123",database="billingnew")  
+	  cursor=con.cursor()
+	  query="select *from stock where pcode={}".format(code)
+	  cursor.execute(query)
+	  rows=cursor.fetchall()
+
+	  for row in rows:
+	  	E2F2.insert(0,row[1])
+	  	E3F2.insert(0,row[2])
+	  	E4F2.insert(0,row[3])
+	  con.commit()	
+
+def clear1():
+
+	E1F2.delete(0,'end')
+	E2F2.delete(0,'end')
+	E3F2.delete(0,'end')
+	E4F2.delete(0,'end')
+	
+
+
+def clear2():
+
+	E1F3.delete(0,'end')
+	E2F3.delete(0,'end')
+
+
+
+
+def clear3():
+
+	E1F5.delete(0,'end')
+	E2F5.delete(0,'end')
+
+
+	
+     
+
+
+
+
+
+
+
+        	
+
+
+
+def clear():
+	E1.delete(0,'end')
+	E2.delete(0,'end')
+	E3.delete(0,'end')
+	E4.delete(0,'end')
+	
+
+
+
+
+root=Tk()
+root.geometry("1350x700+0+0")
+root.title("Billing software")
+bg_color="#066073"
+title=Label(root,text="Billing software",bd=12,bg=bg_color,fg="white",relief=GROOVE,font=("Times New Roman",30,"bold"),pady=2).pack(fill=X)
+
+
+
+F1=LabelFrame(root,text="Stock Management",font=("Times New Roman",15,"bold"),bg="cadetblue",fg="white",bd=7,relief=GROOVE)
+F1.place(x=8,y=78,width=550,height=380)
+
+L1=Label(F1,text="Product code",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L1.place(x=30,y=40)
+
+E1=Entry(F1,font=("arial",15,"bold"))
+E1.place(x=200,y=50,height=25)
+
+L2=Label(F1,text="Product name",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L2.place(x=30,y=100)
+
+E2=Entry(F1,font=("arial",15,"bold"))
+E2.place(x=200,y=110,height=25)
+
+L3=Label(F1,text="Product rate",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L3.place(x=30,y=160)
+
+E3=Entry(F1,font=("arial",15,"bold"))
+E3.place(x=200,y=170,height=25)
+
+L4=Label(F1,text="Product quantity",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L4.place(x=30,y=210)
+
+E4=Entry(F1,font=("arial",15,"bold"))
+E4.place(x=200,y=220,height=25)
+
+B1=Button(F1,text="Insert",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=lambda:insert(E1.get(),E2.get(),E3.get(),E4.get()))
+B1.place(x=15,y=280)
+
+B5=Button(F1,text="clear",font=("arial",15,"bold"),bd=7,fg="black",bg="orchid1",command=clear)
+B5.place(x=430,y=280)
+
+B2=Button(F1,text="Delete",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=lambda:delete(E1.get()))
+B2.place(x=100,y=280)
+
+B3=Button(F1,text="Update P",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=lambda:updateP(E3.get(),E1.get()))
+B3.place(x=190,y=280)
+
+B4=Button(F1,text="Update Q",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=lambda:updateQ(E4.get(),E1.get()))
+B4.place(x=308,y=280)
+
+
+
+
+
+
+F2=LabelFrame(root,text="Product Details",font=("Times New Roman",15,"bold"),bg="cadetblue",fg="white",bd=7,relief=GROOVE)
+F2.place(x=8,y=460,width=550,height=335)
+
+
+L1F2=Label(F2,text="Product code",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L1F2.place(x=30,y=40)
+
+E1F2=Entry(F2,font=("arial",15,"bold"))
+E1F2.place(x=200,y=50,height=25)
+
+L2F2=Label(F2,text="Product name",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L2F2.place(x=30,y=100)
+
+E2F2=Entry(F2,font=("arial",15,"bold"))
+E2F2.place(x=200,y=110,height=25)
+
+L3F2=Label(F2,text="Product rate",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L3F2.place(x=30,y=160)
+
+E3F2=Entry(F2,font=("arial",15,"bold"))
+E3F2.place(x=200,y=170,height=25)
+
+L4F2=Label(F2,text="Product quantity",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L4F2.place(x=30,y=210)
+
+E4F2=Entry(F2,font=("arial",15,"bold"))
+E4F2.place(x=200,y=220,height=25)
+
+B1F2=Button(F2,text="Get",font=("arial",13,"bold"),bg="orchid1",fg="black",bd=4,command=lambda:get(E1F2.get()))
+B1F2.place(x=15,y=260)
+
+
+B2F2=Button(F2,text="Add to bill",font=("arial",13,"bold"),bg="orchid1",fg="black",bd=4)
+B2F2.place(x=150,y=260)
+
+
+B3F2=Button(F2,text="Clear",font=("arial",13,"bold"),bg="orchid1",fg="black",bd=4,command=clear1)
+B3F2.place(x=330,y=260)
+
+
+F3=LabelFrame(root,text="Customer Details",font=("Times New Roman",15,"bold"),bg="cadetblue",fg="white",bd=7,relief=GROOVE)
+F3.place(x=561,y=78,width=970,height=170)
+
+L1F3=Label(F3,text="Customer name",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L1F3.place(x=30,y=40)
+
+E1F3=Entry(F3,font=("arial",15,"bold"))
+E1F3.place(x=200,y=50,height=25)
+
+
+L2F3=Label(F3,text="Phone no",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L2F3.place(x=430,y=40)
+
+
+E2F3=Entry(F3,font=("arial",15,"bold"))
+E2F3.place(x=550,y=50,height=25)
+
+
+B1F3=Button(F3,text="Enter",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7)
+B1F3.place(x=820,y=5)
+
+B2F3=Button(F3,text="Clear",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=clear2)
+B2F3.place(x=820,y=60)
+
+
+
+F4=LabelFrame(root,bd=10,relief=GROOVE)
+F4.place(x=562,y=250,height=550,width=700)
+
+
+L1F4=Label(F4,text="Bill Area",font=("arial",15,"bold"),fg="black",bg="white",bd=7,relief=GROOVE).pack(fill=X)
+
+
+scrol_y=Scrollbar(F4,orient=VERTICAL)
+txtarea=Text(F4,yscrollcommand=scrol_y.set)
+scrol_y.pack(side=RIGHT,fill=Y)
+scrol_y.configure(command=txtarea.yview)
+txtarea.pack(fill=BOTH,expand=1)
+
+
+
+F5=Label(root,bg="cadet blue",fg="white",relief=SUNKEN,padx=30,pady=30)
+F5.place(x=1265,y=249,height=540,width=264)
+
+L1F5=Label(F5,text="Enter Date",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L1F5.place(x=15,y=20)
+
+
+E1F5=Entry(F5,font=("arial",15,"bold"))
+E1F5.place(x=15,y=70,height=25)
+
+L2F5=Label(F5,text="Enter time",font=("Times New Roman",15,"bold"),bg="white",fg="black",bd=7,relief=SUNKEN)
+L2F5.place(x=15,y=110)
+
+E2F5=Entry(F5,font=("arial",15,"bold"))
+E2F5.place(x=15,y=160,height=25)
+
+
+B1F5=Button(F5,text="Enter",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7)
+B1F5.place(x=15,y=190)
+
+B2F5=Button(F5,text="Clear",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7,command=clear3)
+B2F5.place(x=100,y=190)
+
+
+B3F5=Button(F5,text="Format",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7)
+B3F5.place(x=15,y=300)
+
+
+B4F5=Button(F5,text="Total",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7)
+B4F5.place(x=125,y=300)
+
+
+B5F5=Button(F5,text="Clear Bill",font=("arial",15,"bold"),bg="orchid1",fg="black",bd=7)
+B5F5.place(x=15,y=380)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+root.mainloop()
